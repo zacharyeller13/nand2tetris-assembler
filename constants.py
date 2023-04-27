@@ -3,6 +3,7 @@
 # d: dest bits
 # j: jump bits
 
+# Symbol: Memory Address
 PRE_DEFINED_SYMBOLS = {
     "R0":       0,
     "R1":       1,
@@ -29,6 +30,7 @@ PRE_DEFINED_SYMBOLS = {
     "THAT":     4
 }
 
+# Symbol: Binary Form
 COMP_TABLE = {
     "0":    "0101010",
     "1":    "0111111",
@@ -60,6 +62,7 @@ COMP_TABLE = {
     "D|M":  "1010101"
 }
 
+# Symbol: Binary Form
 DEST_TABLE = {
     "M":    "001",
     "D":    "010",
@@ -70,6 +73,7 @@ DEST_TABLE = {
     "AMD":  "111"
 }
 
+# Symbol: Binary Form
 JUMP_TABLE = {
     "JGT":  "001",
     "JEQ":  "010",
