@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "nand2tetris-assembler"
+version = "0.1.0"
+description = ""
+authors = ["Zachary Eller <37415056+zacharyeller13@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "nand2tetris_assembler"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
