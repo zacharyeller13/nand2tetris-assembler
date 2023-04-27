@@ -95,3 +95,4 @@ BIN_START = "111"
 LABEL_START = '('
 LABEL_END = ')'
 VAR_START = '@'
+COMMENT = "//"
