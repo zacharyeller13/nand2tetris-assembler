@@ -2,13 +2,12 @@ from constants import COMMENT, VAR_START
 
 
 class Parser:
-    """Class to parse a file into a list of instructions"
+    """
+    Class to parse a file into a list of instructions"
 
     Attributes:
         `instructions` (list[str]): a list of instructions from the
             file passed to the constructor.
-        `commands` (dict[int, string]): a dictionary with line number
-            and Instruction object that holds the necessary fields of the instruction
 
     """
 
@@ -16,7 +15,8 @@ class Parser:
         self.instructions: list[str] = self._read_instructions(file)
 
     def _read_instructions(self, file: str) -> list[str]:
-        """Private method to read in a file and parse it into
+        """
+        Private method to read in a file and parse it into
         a list of instructions without whitespace or comments
 
         Args:
@@ -27,6 +27,7 @@ class Parser:
                 whitespace or comments
 
         """
+
         with open(file, "r", encoding="UTF-8") as f:
             lines = f.read().split("\n")
             lines = [
@@ -37,36 +38,19 @@ class Parser:
 
             return lines
 
+    def parse_instructions(self) -> dict[int, str]:
+        """
+        Parse `instructions` into a dictionary with keys being line-numbers
+            and values being the instruction (without any leading instruction chars like '@')
 
-class Instruction:
-    """Class to hold the main string representation of any instruction
-        and its 3 primary fields
+        Returns:
+            dict[int, str]: `self.instructions` parsed into a dictionary of line-numbers and
+                their corresponding instruction values as strings
+        """
 
-    Attributes:
-        `type` (str): One of A, C, or Label
-        `comp` (str | None): The comp parts of the C instruction
-        `dest` (str | None): The dest parts of the C instruction
-        `jump` (str | None): The jump parts of the C instruction
+        parsed_instructions = {}
 
-    """
+        for i, instruction in enumerate(self.instructions):
+            parsed_instructions[i] = instruction.removeprefix(VAR_START)
 
-    def __init__(self, instruction: str):
-        self.type = self._parse_type(instruction)
-        self.comp = self._parse_comp(instruction)
-        self.dest = self._parse_dest(instruction)
-        self.jump = self._parse_jump(instruction)
-
-    def _parse_type(self, instruction: str) -> str:
-        if instruction[0] == VAR_START:
-            return "A"
-        else:
-            return "C"
-
-    def _parse_comp(self, instruction: str):
-        raise NotImplementedError
-
-    def _parse_dest(self, instruction: str):
-        raise NotImplementedError
-
-    def _parse_jump(self, instruction: str):
-        raise NotImplementedError
+        return parsed_instructions
