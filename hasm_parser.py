@@ -1,3 +1,8 @@
+"""
+Parser class to parse .asm file into a hashtable (dictionary) of lines
+and their corresponding instructions
+"""
+
 from constants import COMMENT, VAR_START
 
 

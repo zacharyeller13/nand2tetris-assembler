@@ -1,4 +1,5 @@
-"""Constants for the assembler
+"""
+Constants for the assembler
 
 Binary Syntax: 1 1 1 a c1 c2 c3 c4 c5 c6 d1 d2 d3 j1 j2 j3
 a and c: comp bits
