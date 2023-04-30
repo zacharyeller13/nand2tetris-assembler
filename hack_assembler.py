@@ -1,7 +1,7 @@
 from argparse import ArgumentParser, Namespace
 import sys
 
-from hasm_parser import Parser
+from hasm_parser import parse_file, parse_instructions
 
 
 def initialize_argparser() -> ArgumentParser:
