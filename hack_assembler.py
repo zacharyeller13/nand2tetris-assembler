@@ -40,3 +40,6 @@ if __name__ == "__main__":
 
     parsed_file = parse_file(file)
     parsed_instructions = parse_instructions(parsed_file)
+
+    # Test the printout of the instructions dict
+    print(*zip(parsed_instructions.keys(), map(lambda x: str(x), parsed_instructions.values())))
