@@ -1,8 +1,13 @@
-# Binary Syntax: 1 1 1 a c1 c2 c3 c4 c5 c6 d1 d2 d3 j1 j2 j3
-# a and c: comp bits
-# d: dest bits
-# j: jump bits
+"""
+Constants for the assembler
 
+Binary Syntax: 1 1 1 a c1 c2 c3 c4 c5 c6 d1 d2 d3 j1 j2 j3
+a and c: comp bits
+d: dest bits
+j: jump bits
+"""
+
+# Symbol: Memory Address
 PRE_DEFINED_SYMBOLS = {
     "R0":       0,
     "R1":       1,
@@ -29,6 +34,7 @@ PRE_DEFINED_SYMBOLS = {
     "THAT":     4
 }
 
+# Symbol: Binary Form
 COMP_TABLE = {
     "0":    "0101010",
     "1":    "0111111",
@@ -60,6 +66,7 @@ COMP_TABLE = {
     "D|M":  "1010101"
 }
 
+# Symbol: Binary Form
 DEST_TABLE = {
     "M":    "001",
     "D":    "010",
@@ -70,6 +77,7 @@ DEST_TABLE = {
     "AMD":  "111"
 }
 
+# Symbol: Binary Form
 JUMP_TABLE = {
     "JGT":  "001",
     "JEQ":  "010",
@@ -88,3 +96,4 @@ BIN_START = "111"
 LABEL_START = '('
 LABEL_END = ')'
 VAR_START = '@'
+COMMENT = "//"

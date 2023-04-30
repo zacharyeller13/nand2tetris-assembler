@@ -9,7 +9,11 @@ packages = [{include = "nand2tetris_assembler"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
+pytest = "^7.3.1"
 
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
 
 [build-system]
 requires = ["poetry-core"]
