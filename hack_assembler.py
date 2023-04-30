@@ -37,3 +37,6 @@ if __name__ == "__main__":
     
     arg_parser = initialize_argparser()
     file = initialize_arguments(arg_parser).file
+
+    parsed_file = parse_file(file)
+    parsed_instructions = parse_instructions(parsed_file)
