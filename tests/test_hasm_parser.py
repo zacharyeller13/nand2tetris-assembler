@@ -4,30 +4,37 @@ Test methods for hasm_parser module
 
 import os
 
-from hasm_parser import parse_file, parse_instructions
+from hasm_parser import parse_file, parse_instructions, CInstruction
 
+expected_c_instruction = CInstruction("D=M+1")
+expected_jmp_instruction = CInstruction("0;JMP")
+expected_c_instruction.comp = "M+1"
+expected_c_instruction.dest = "D"
+expected_c_instruction.jump = None
+expected_jmp_instruction.jump = "JMP"
 
 def test_parse_file_basic():
-    parsed_file = parse_file(f"{os.path.dirname(__file__)}/parser_test_file")
-    assert parsed_file == ["@1", "D=M+1", "@2"]
+    parsed_file = parse_file(f"{os.path.dirname(__file__)}/parser_test_file.asm")
+    assert parsed_file == ["@1", "D=M+1", "@2", "0;JMP"]
 
 
 def test_parse_file_whitespace():
-    parsed_file = parse_file(f"{os.path.dirname(__file__)}/parser_test_file_whitespace")
-    assert parsed_file == ["@1", "D=M+1", "@2"]
+    parsed_file = parse_file(f"{os.path.dirname(__file__)}/parser_test_file_whitespace.asm")
+    assert parsed_file == ["@1", "D=M+1", "@2", "0;JMP"]
 
 
 def test_parse_file_comments():
-    parsed_file = parse_file(f"{os.path.dirname(__file__)}/parser_test_file_comments")
-    assert parsed_file == ["@1", "D=M+1", "@2"]
+    parsed_file = parse_file(f"{os.path.dirname(__file__)}/parser_test_file_comments.asm")
+    assert parsed_file == ["@1", "D=M+1", "@2", "0;JMP"]
 
 
 def test_parse_instructions():
-    parsed_file = parse_file(f"{os.path.dirname(__file__)}/parser_test_file")
+    parsed_file = parse_file(f"{os.path.dirname(__file__)}/parser_test_file.asm")
     assert parse_instructions(parsed_file) == {
         0: "1",
-        1: "D=M+1",
-        2: "2"
+        1: expected_c_instruction,
+        2: "2",
+        3: expected_jmp_instruction
     }
 
 def test_parse_instructions_with_labels():
