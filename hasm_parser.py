@@ -16,6 +16,7 @@ class CInstruction:
         `dest`: string destination part of the instruction.  None if there is no destination
         `jump`: string jump part of the instruction. None if no jump being made
     """
+
     def __init__(self, instruction: str) -> None:
         self.instruction = instruction
         self.comp = self.parse_comp(instruction)
@@ -23,27 +24,61 @@ class CInstruction:
         self.jump = self.parse_jump(instruction)
 
     def parse_comp(self, instruction: str) -> str:
-        if instruction[1] == '=':
+        """
+        Parse out the comp part of a C-Instruction
+
+        Args:
+            `instruction` (str): The C-Instruction
+
+        Returns:
+            the comp part of a C-Instruction
+        """
+
+        if instruction[1] == "=":
             return instruction[2:]
         else:
-            return instruction[:instruction.index(';')]
+            return instruction[: instruction.index(";")]
 
     def parse_dest(self, instruction: str) -> str | None:
-        if instruction[1] == '=':
+        """
+        Parse out the dest part of a C-Instruction
+
+        Args:
+            `instruction` (str): The C-Instruction
+
+        Returns:
+            str | None: the dest part of a C-Instruction or None if there is no dest part
+        """
+
+        if instruction[1] == "=":
             return instruction[:1]
-        
+
     def parse_jump(self, instruction: str) -> str | None:
-        if (index := instruction.find(';')) != -1:
-            return instruction[index+1:]
-        
+        """
+        Parse out the jump part of a C-Instruction
+
+        Args:
+            `instruction` (str): The C-Instruction
+
+        Returns:
+            str | None: the jump part of a C-Instruction or None if there is no jump part
+        """
+
+        if (index := instruction.find(";")) != -1:
+            return instruction[index + 1 :]
+
     def __str__(self) -> str:
         return f"{self.dest=}, {self.comp=}, {self.jump=}"
-    
+
     def __eq__(self, other) -> bool:
         if not isinstance(other, CInstruction):
             raise NotImplementedError
-        
-        return self.comp == other.comp and self.dest == other.dest and self.jump == other.jump
+
+        return (
+            self.comp == other.comp
+            and self.dest == other.dest
+            and self.jump == other.jump
+        )
 
 
 def parse_file(file: str) -> list[str]:
@@ -70,14 +105,18 @@ def parse_file(file: str) -> list[str]:
 
         return lines
 
+
 def parse_instructions(instructions: list[str]) -> dict[int, str | CInstruction]:
     """
     Parse `instructions` into a dictionary with keys representing line-numbers
         and values representing the instruction (without any leading instruction chars like '@')
 
+    Args:
+        `instructions` (list[str]): the list of instructions
+
     Returns:
-        dict[int, str]: `instructions` parsed into a dictionary of line-numbers and
-            their corresponding instruction values as strings
+        dict[int, str | CInstruction]: `instructions` parsed into a dictionary of line-numbers and
+            their corresponding instruction values as strings or CInstruction objects
     """
 
     parsed_instructions = {}
