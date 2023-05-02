@@ -4,6 +4,7 @@ into binary machine code
 """
 
 from constants import BIN_START, COMP_TABLE, DEST_TABLE, JUMP_TABLE, NO_DEST, NO_JUMP
+from hasm_parser import CInstruction
 
 
 def comp_to_bin(comp: str) -> str:
@@ -56,3 +57,28 @@ def jump_to_bin(jump: str | None) -> str:
         return NO_JUMP
 
     return JUMP_TABLE[jump]
+
+
+def c_inst_to_bin(c_inst: CInstruction) -> str:
+    """
+    Translate full C-Instruction into its binary representation
+
+    Args:
+        `c_inst` (`CInstruction`): The `CInstruction` to be translated.
+            E.g.: "D=M+1"
+
+    Returns:
+        str: The binary representation of the C-Instruction output as a string.
+    """
+    return "".join(
+        [
+            BIN_START,
+            comp_to_bin(c_inst.comp),
+            dest_to_bin(c_inst.dest),
+            jump_to_bin(c_inst.jump),
+        ]
+    )
+
+
+def a_inst_to_bin() -> str:
+    raise NotImplementedError

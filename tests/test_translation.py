@@ -2,7 +2,8 @@
 Test methods for translator module
 """
 
-from translator import comp_to_bin, dest_to_bin, jump_to_bin
+from hasm_parser import CInstruction
+from translator import comp_to_bin, dest_to_bin, jump_to_bin, c_inst_to_bin, a_inst_to_bin
 
 def test_comp_to_bin_0() -> None:
     assert comp_to_bin(comp="0") == "0101010"
@@ -42,3 +43,13 @@ def test_jump_to_bin_JGT() -> None:
 
 def test_jump_to_bin_JLE() -> None:
     assert jump_to_bin(jump="JLE") == "110"
+
+
+def test_c_inst_to_bin_no_jump() -> None:
+    test_c_inst_no_jump = CInstruction("MD=D+1")
+    assert c_inst_to_bin(test_c_inst_no_jump) == "1110011111011000"
+
+
+def test_c_inst_to_bin_with_jump() -> None:
+    test_c_inst_with_jump = CInstruction("MD=A-1;JGE")
+    assert c_inst_to_bin(test_c_inst_with_jump) == "1110110010011011"
