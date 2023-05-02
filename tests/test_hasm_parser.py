@@ -37,6 +37,7 @@ def test_parse_instructions():
         3: expected_jmp_instruction
     }
 
+
 def test_parse_instructions_with_labels():
     # TODO
     assert False

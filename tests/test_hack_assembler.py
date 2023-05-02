@@ -1,8 +1,7 @@
 """
 Test methods for main hack_assembler module
 """
-import sys
-from io import StringIO
+
 from pytest import MonkeyPatch, raises
 from hack_assembler import initialize_arguments, initialize_argparser, Namespace
 
