@@ -92,3 +92,25 @@ def a_inst_to_bin(a_inst: int) -> str:
     """
 
     return bin(a_inst)[2:].zfill(16)
+
+
+def translate_instructions(instructions: dict[int, str | CInstruction]) -> list[str]:
+    """
+    Translate a dictionary of Assembly instructions into a list of binary instructions
+
+    Args:
+        `instructions` (dict[int, str | CInstruction]): The dictionary of assembly instructions
+    
+    Returns:
+        `list[str]`: The list of instructions in binary (as strings)
+    """
+
+    binary_instructions = []
+
+    for instruction in instructions.values():
+        if isinstance(instruction, CInstruction):
+            binary_instructions.append(c_inst_to_bin(instruction))
+        else:
+            binary_instructions.append(a_inst_to_bin(int(instruction)))
+
+    return binary_instructions
