@@ -80,5 +80,5 @@ def c_inst_to_bin(c_inst: CInstruction) -> str:
     )
 
 
-def a_inst_to_bin() -> str:
-    raise NotImplementedError
+def a_inst_to_bin(a_inst: int) -> str:
+    return bin(a_inst)[2:].zfill(16)

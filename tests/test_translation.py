@@ -53,3 +53,10 @@ def test_c_inst_to_bin_no_jump() -> None:
 def test_c_inst_to_bin_with_jump() -> None:
     test_c_inst_with_jump = CInstruction("MD=A-1;JGE")
     assert c_inst_to_bin(test_c_inst_with_jump) == "1110110010011011"
+
+
+def test_a_inst_to_bin() -> None:
+    assert a_inst_to_bin(42) == "0000000000101010"
+
+def test_a_inst_to_bin2() -> None:
+    assert a_inst_to_bin(2) == "0000000000000010"
