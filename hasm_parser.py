@@ -34,10 +34,13 @@ class CInstruction:
             the comp part of a C-Instruction
         """
 
-        if instruction[1] == "=":
-            return instruction[2:]
-        else:
-            return instruction[: instruction.index(";")]
+        if (end_index := instruction.find(";")) == -1:
+            end_index = len(instruction)
+
+        if (start_index := instruction.find("=") + 1) != 0:
+            return instruction[start_index:end_index]
+
+        return instruction[:end_index]
 
     def parse_dest(self, instruction: str) -> str | None:
         """
@@ -50,8 +53,8 @@ class CInstruction:
             str | None: the dest part of a C-Instruction or None if there is no dest part
         """
 
-        if instruction[1] == "=":
-            return instruction[:1]
+        if (end_index := instruction.find("=")) != -1:
+            return instruction[:end_index]
 
     def parse_jump(self, instruction: str) -> str | None:
         """
