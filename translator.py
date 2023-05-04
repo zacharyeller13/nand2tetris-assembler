@@ -81,4 +81,14 @@ def c_inst_to_bin(c_inst: CInstruction) -> str:
 
 
 def a_inst_to_bin(a_inst: int) -> str:
+    """
+    Translate full A-Instruction into its 16-bit representation
+
+    Args:
+        `a_inst` (int): The A-Instruction to be translated.
+
+    Returns:
+        str: The 16-bit representation of the A-Instruction output as a string.
+    """
+
     return bin(a_inst)[2:].zfill(16)
