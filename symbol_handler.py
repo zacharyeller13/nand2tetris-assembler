@@ -21,6 +21,18 @@ class SymbolHandler:
         self.symbol_table: dict[str, int] = PRE_DEFINED_SYMBOLS
         self._next_address: int = 16
 
+
+    def handle_symbols(self, instructions: list[str]) -> None:
+        """
+        Handle all symbols in an instruction set by adding to the symbol table where necessary
+
+        Args:
+            `instructions` (list[str]): A list of .asm instructions
+        """
+
+        raise NotImplementedError
+
+
     def handle_symbol(self, symbol: str) -> None:
         """
         Handle a supplied symbol by adding it to the symbol table if it does not already exist there
@@ -31,6 +43,7 @@ class SymbolHandler:
         """
 
         raise NotImplementedError
+
 
     def _handle_label(self, label: str) -> None:
         """
