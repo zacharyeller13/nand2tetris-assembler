@@ -10,8 +10,9 @@ class SymbolHandler:
     Class that maintains the Symbol table and labels for a .asm file.
 
     Attributes:
-        `symbol_table` (dict[str, int]): The symbol table that contains `PRE_DEFINED_SYMBOLS` as well as any
-            symbols encountered in the .asm file. Pre-defined symbols and @var symbols reference a memory address.
+        `symbol_table` (dict[str, int]): The symbol table that contains `PRE_DEFINED_SYMBOLS`
+            as well as any symbols encountered in the .asm file.
+            Pre-defined symbols and @var symbols reference a memory address.
             (Labels) reference the next line number in the file.
         `next_address` int: Starting at 16, represents the memory address to be assigned to the next
             encountered variable.

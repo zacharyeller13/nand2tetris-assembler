@@ -5,6 +5,7 @@ into binary machine code
 
 from constants import BIN_START, COMP_TABLE, DEST_TABLE, JUMP_TABLE, NO_DEST, NO_JUMP
 from hasm_parser import CInstruction
+from symbol_handler import SymbolHandler
 
 
 def comp_to_bin(comp: str) -> str:
@@ -107,10 +108,13 @@ def translate_instructions(instructions: dict[int, str | CInstruction]) -> list[
 
     binary_instructions = []
 
-    for instruction in instructions.values():
+    for _, instruction in instructions.items():
         if isinstance(instruction, CInstruction):
             binary_instructions.append(c_inst_to_bin(instruction))
         else:
+            # TODO handle @var symbols - simple lookup in symbol table
+            # TODO handle (Labels) referenced as @labelSymbol
+            #   - lookup in symbol table and "goto" referenced line
             binary_instructions.append(a_inst_to_bin(int(instruction)))
 
     return binary_instructions
