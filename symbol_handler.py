@@ -96,4 +96,4 @@ class SymbolHandler:
         if return_value := self.symbol_table.get(symbol):
             return return_value
 
-        raise KeyError("Variable or Label does not exist in the symbol table.")
+        raise KeyError(f"Variable or Label {symbol} does not exist in the symbol table.")

@@ -2,6 +2,7 @@ from argparse import ArgumentParser, Namespace
 import sys
 
 from hasm_parser import parse_file, parse_instructions
+from symbol_handler import SymbolHandler
 from translator import translate_instructions
 
 
@@ -40,14 +41,15 @@ def initialize_arguments(arg_parser: ArgumentParser) -> Namespace:
 if __name__ == "__main__":
     args = initialize_argparser()
     file = initialize_arguments(args).file
+    symbol_handler = SymbolHandler()
 
     parsed_file = parse_file(file)
-    parsed_instructions = parse_instructions(parsed_file)
+    parsed_instructions = parse_instructions(parsed_file, symbol_handler)
 
     # Test the printout of the instructions dict
     # print(*zip(parsed_instructions.keys(), map(str, parsed_instructions.values())))
 
-    binary_instructions = translate_instructions(parsed_instructions)
+    binary_instructions = translate_instructions(parsed_instructions, symbol_handler)
 
     # print(binary_instructions)
 

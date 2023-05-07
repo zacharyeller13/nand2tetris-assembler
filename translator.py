@@ -114,7 +114,8 @@ def translate_instructions(
         if isinstance(instruction, CInstruction):
             binary_instructions.append(c_inst_to_bin(instruction))
         else:
-            instruction = symbol_handler.lookup_symbol(instruction)
+            if not instruction.isdigit():
+                instruction = symbol_handler.lookup_symbol(instruction)
             binary_instructions.append(a_inst_to_bin(int(instruction)))
 
     return binary_instructions
