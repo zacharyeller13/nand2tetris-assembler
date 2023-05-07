@@ -41,7 +41,7 @@ def test_full_c_instruction():
 
 def test_parse_instructions():
     parsed_file = parse_file(f"{os.path.dirname(__file__)}/parser_test_file.asm")
-    assert parse_instructions(parsed_file) == {
+    assert parse_instructions(parsed_file, symbol_handler=None) == { # type: ignore
         0: "1",
         1: expected_c_instruction,
         2: "2",

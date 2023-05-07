@@ -126,17 +126,23 @@ def parse_instructions(instructions: list[str], symbol_handler: SymbolHandler) -
     """
 
     parsed_instructions = {}
+    line_num = 0
 
     for i, instruction in enumerate(instructions):
         if instruction[0] not in (VAR_START, LABEL_START):
-            parsed_instructions[i] = CInstruction(instruction)
+            parsed_instructions[line_num] = CInstruction(instruction)
+            line_num += 1
+        elif instruction[0] == VAR_START and instruction[1:].isdigit():
+            parsed_instructions[line_num] = instruction.removeprefix(VAR_START)
+            line_num += 1
         else:
             # We pass the @var or (Label) into the symbol handler to be 
             # added to the symbol table where necessary as well as to be cleaned
-            # and return back to the dictionary of instructions. If it's a label, we return None back
+            # and return back to the dictionary of instructions. If it's a label declaration, we return None
+            # and skip that line
             if (parsed_instruction := symbol_handler.handle_symbol(instruction, i) != None):
-                parsed_instructions[i] = parsed_instruction
-                
-            # parsed_instructions[i] = instruction.removeprefix(VAR_START)
+                parsed_instructions[line_num] = parsed_instruction
+                line_num += 1
+
 
     return parsed_instructions
