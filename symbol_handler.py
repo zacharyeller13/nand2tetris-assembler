@@ -41,7 +41,7 @@ class SymbolHandler:
         else:
             symbol = symbol.removeprefix(VAR_START)
 
-            if not self.symbol_table.get(symbol):
+            if self.symbol_table.get(symbol) is None:
                 self._add_var(symbol)
 
             return symbol
@@ -93,7 +93,7 @@ class SymbolHandler:
             int: The corresponding value from the `symbol_table`.
         """
 
-        if return_value := self.symbol_table.get(symbol):
+        if (return_value := self.symbol_table.get(symbol)) is not None:
             return return_value
 
         raise KeyError(f"Variable or Label {symbol} does not exist in the symbol table.")

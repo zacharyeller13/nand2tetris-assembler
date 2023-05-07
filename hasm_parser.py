@@ -148,8 +148,7 @@ def parse_instructions(
                 parsed_instruction := symbol_handler.handle_symbol(
                     instruction, line_num
                 )
-                is not None
-            ):
+            ) is not None:
                 parsed_instructions[line_num] = parsed_instruction
                 line_num += 1
 
