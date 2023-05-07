@@ -19,9 +19,8 @@ class SymbolHandler:
     """
 
     def __init__(self) -> None:
-        self.symbol_table: dict[str, int] = PRE_DEFINED_SYMBOLS
+        self.symbol_table: dict[str, int] = PRE_DEFINED_SYMBOLS.copy()
         self._next_address: int = 16
-
 
     def handle_symbols(self, instructions: list[str]) -> None:
         """
@@ -34,26 +33,27 @@ class SymbolHandler:
         # TODO - May not actually be necessary if we read in at time of parsing instructions
         raise NotImplementedError
 
-
     def handle_symbol(self, symbol: str, line_num: int) -> str | None:
         """
         Handle a supplied symbol by adding it to the symbol table if it does not already exist there
 
         Args:
-            `symbol` (str): The symbol to be checked and added to the `symbol_table` 
+            `symbol` (str): The symbol to be checked and added to the `symbol_table`
                 if it does not already exist
             `line_num` (int): The line number of this symbol in the .asm file
 
         Returns:
-            str | None: The cleaned symbol (removed '@') if symbol is an @var; 
+            str | None: The cleaned symbol (removed '@') if symbol is an @var;
                 None if symbol is a (Label) declaration
         """
 
         if self._is_label(symbol):
             self._handle_label(symbol, line_num)
         else:
-            raise NotImplementedError
-
+            symbol = symbol.removeprefix(VAR_START)
+            if not self.symbol_table.get(symbol):
+                self._add_var(symbol)
+            return symbol
 
     def _is_label(self, symbol: str) -> bool:
         """
@@ -63,8 +63,7 @@ class SymbolHandler:
             `symbol` (str): The symbol to be checked
         """
 
-        return symbol[0] == LABEL_START and symbol[-1] == LABEL_END
-    
+        return symbol.startswith(LABEL_START) and symbol.endswith(LABEL_END)
 
     def _handle_label(self, label: str, line_num: int) -> None:
         """
@@ -75,4 +74,18 @@ class SymbolHandler:
             `line_num` (int): The line number passed through from `handle_symbol`
         """
 
-        raise NotImplementedError
+        label = label.removeprefix(LABEL_START).removesuffix(LABEL_END)
+
+        if not self.symbol_table.get(label):
+            self.symbol_table[label] = line_num
+
+    def _add_var(self, symbol: str) -> None:
+        """
+        Add a symbol to the `symbol_table` and increment `_next_address`
+        
+        Args:
+            `symbol`: The symbol to be added
+        """
+
+        self.symbol_table[symbol] = self._next_address
+        self._next_address += 1

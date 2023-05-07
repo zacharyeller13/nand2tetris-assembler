@@ -110,7 +110,9 @@ def parse_file(file: str) -> list[str]:
         return lines
 
 
-def parse_instructions(instructions: list[str], symbol_handler: SymbolHandler) -> dict[int, str | CInstruction]:
+def parse_instructions(
+    instructions: list[str], symbol_handler: SymbolHandler
+) -> dict[int, str | CInstruction]:
     """
     Parse `instructions` into a dictionary with keys representing line-numbers
         and values representing the instruction (without any leading instruction chars like '@')
@@ -126,7 +128,7 @@ def parse_instructions(instructions: list[str], symbol_handler: SymbolHandler) -
     """
 
     parsed_instructions = {}
-    # Separate from the actual iteration of the instructions list so we can skip an increment if 
+    # Separate from the actual iteration of the instructions list so we can skip an increment if
     # symbol is a (Label)
     line_num = 0
 
@@ -134,17 +136,21 @@ def parse_instructions(instructions: list[str], symbol_handler: SymbolHandler) -
         if instruction[0] not in (VAR_START, LABEL_START):
             parsed_instructions[line_num] = CInstruction(instruction)
             line_num += 1
-        elif instruction[0] == VAR_START and instruction[1:].isdigit():
+        elif instruction.startswith(VAR_START) and instruction[1:].isdigit():
             parsed_instructions[line_num] = instruction.removeprefix(VAR_START)
             line_num += 1
         else:
-            # We pass the @var or (Label) into the symbol handler to be 
+            # We pass the @var or (Label) into the symbol handler to be
             # added to the symbol table where necessary as well as to be cleaned
-            # and return back to the dictionary of instructions. If it's a label declaration, we return None
-            # and skip that line
-            if (parsed_instruction := symbol_handler.handle_symbol(instruction, line_num) != None):
+            # and return back to the dictionary of instructions.
+            # If it's a label declaration, we return None and skip that line
+            if (
+                parsed_instruction := symbol_handler.handle_symbol(
+                    instruction, line_num
+                )
+                is not None
+            ):
                 parsed_instructions[line_num] = parsed_instruction
                 line_num += 1
-
 
     return parsed_instructions
