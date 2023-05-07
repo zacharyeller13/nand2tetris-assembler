@@ -35,7 +35,7 @@ class SymbolHandler:
         raise NotImplementedError
 
 
-    def handle_symbol(self, symbol: str, line_num: int) -> str:
+    def handle_symbol(self, symbol: str, line_num: int) -> str | None:
         """
         Handle a supplied symbol by adding it to the symbol table if it does not already exist there
 
@@ -45,21 +45,19 @@ class SymbolHandler:
             `line_num` (int): The line number of this symbol in the .asm file
 
         Returns:
-            str: The cleaned symbol (removed '@' from @var or '(' and ')' from (Label))
+            str | None: The cleaned symbol (removed '@') if symbol is an @var; 
+                None if symbol is a (Label) declaration
         """
 
         raise NotImplementedError
 
 
-    def _handle_label(self, label: str) -> None:
+    def _is_label(self, symbol: str) -> bool:
         """
-        Labels are different from regular symbols in that they reference the next line-number 
-            rather than a memory address.  Handle them by maintaining the surrounding '()'
-            and making their value the next line-number (or even the next statement?).
-            Add to `symbol_table`
+        Check if a symbol being handled is a label
 
         Args:
-            `label` (str): The label to be handled
+            `symbol` (str): The symbol to be checked
         """
 
-        raise NotImplementedError
+        return symbol[0] == LABEL_START and symbol[-1] == LABEL_END

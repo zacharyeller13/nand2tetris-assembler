@@ -114,7 +114,6 @@ def translate_instructions(instructions: dict[int, str | CInstruction]) -> list[
         else:
             # TODO handle @var symbols - simple lookup in symbol table
             # TODO handle (Labels) referenced as @labelSymbol
-            #   - lookup in symbol table and "goto" referenced line
             binary_instructions.append(a_inst_to_bin(int(instruction)))
 
     return binary_instructions

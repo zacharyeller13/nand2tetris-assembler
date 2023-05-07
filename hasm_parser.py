@@ -126,9 +126,11 @@ def parse_instructions(instructions: list[str], symbol_handler: SymbolHandler) -
     """
 
     parsed_instructions = {}
+    # Separate of the actual iteration of the instructions list so we can skip an increment if 
+    # symbol is a (Label)
     line_num = 0
 
-    for i, instruction in enumerate(instructions):
+    for instruction in instructions:
         if instruction[0] not in (VAR_START, LABEL_START):
             parsed_instructions[line_num] = CInstruction(instruction)
             line_num += 1
@@ -140,7 +142,7 @@ def parse_instructions(instructions: list[str], symbol_handler: SymbolHandler) -
             # added to the symbol table where necessary as well as to be cleaned
             # and return back to the dictionary of instructions. If it's a label declaration, we return None
             # and skip that line
-            if (parsed_instruction := symbol_handler.handle_symbol(instruction, i) != None):
+            if (parsed_instruction := symbol_handler.handle_symbol(instruction, line_num) != None):
                 parsed_instructions[line_num] = parsed_instruction
                 line_num += 1
 
