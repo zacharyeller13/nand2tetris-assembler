@@ -95,13 +95,15 @@ def a_inst_to_bin(a_inst: int) -> str:
     return bin(a_inst)[2:].zfill(16)
 
 
-def translate_instructions(instructions: dict[int, str | CInstruction]) -> list[str]:
+def translate_instructions(
+    instructions: dict[int, str | CInstruction], symbol_handler: SymbolHandler
+) -> list[str]:
     """
     Translate a dictionary of Assembly instructions into a list of binary instructions
 
     Args:
         `instructions` (dict[int, str | CInstruction]): The dictionary of assembly instructions
-    
+
     Returns:
         `list[str]`: The list of instructions in binary (as strings)
     """
@@ -112,8 +114,7 @@ def translate_instructions(instructions: dict[int, str | CInstruction]) -> list[
         if isinstance(instruction, CInstruction):
             binary_instructions.append(c_inst_to_bin(instruction))
         else:
-            # TODO handle @var symbols - simple lookup in symbol table
-            # TODO handle (Labels) referenced as @labelSymbol
+            instruction = symbol_handler.lookup_symbol(instruction)
             binary_instructions.append(a_inst_to_bin(int(instruction)))
 
     return binary_instructions

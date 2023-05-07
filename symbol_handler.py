@@ -22,17 +22,6 @@ class SymbolHandler:
         self.symbol_table: dict[str, int] = PRE_DEFINED_SYMBOLS.copy()
         self._next_address: int = 16
 
-    def handle_symbols(self, instructions: list[str]) -> None:
-        """
-        Handle all symbols in an instruction set by adding to the symbol table where necessary
-
-        Args:
-            `instructions` (list[str]): A list of .asm instructions
-        """
-
-        # TODO - May not actually be necessary if we read in at time of parsing instructions
-        raise NotImplementedError
-
     def handle_symbol(self, symbol: str, line_num: int) -> str | None:
         """
         Handle a supplied symbol by adding it to the symbol table if it does not already exist there
@@ -51,8 +40,10 @@ class SymbolHandler:
             self._handle_label(symbol, line_num)
         else:
             symbol = symbol.removeprefix(VAR_START)
+
             if not self.symbol_table.get(symbol):
                 self._add_var(symbol)
+
             return symbol
 
     def _is_label(self, symbol: str) -> bool:
@@ -82,10 +73,27 @@ class SymbolHandler:
     def _add_var(self, symbol: str) -> None:
         """
         Add a symbol to the `symbol_table` and increment `_next_address`
-        
+
         Args:
             `symbol`: The symbol to be added
         """
 
         self.symbol_table[symbol] = self._next_address
         self._next_address += 1
+
+    def lookup_symbol(self, symbol: str) -> int:
+        """
+        Lookup the symbol in the `symbol_table`.  If it exists, return the value.
+            If it does not exist, raise an error as this should have been handled on first read.
+
+        Args:
+            `symbol` (str): The symbol to be looked up in the `symbol_table`
+
+        Returns:
+            int: The corresponding value from the `symbol_table`.
+        """
+
+        if return_value := self.symbol_table.get(symbol):
+            return return_value
+
+        raise KeyError("Variable or Label does not exist in the symbol table.")
