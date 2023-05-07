@@ -126,7 +126,7 @@ def parse_instructions(instructions: list[str], symbol_handler: SymbolHandler) -
     """
 
     parsed_instructions = {}
-    # Separate of the actual iteration of the instructions list so we can skip an increment if 
+    # Separate from the actual iteration of the instructions list so we can skip an increment if 
     # symbol is a (Label)
     line_num = 0
 

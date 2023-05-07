@@ -49,7 +49,10 @@ class SymbolHandler:
                 None if symbol is a (Label) declaration
         """
 
-        raise NotImplementedError
+        if self._is_label(symbol):
+            self._handle_label(symbol, line_num)
+        else:
+            raise NotImplementedError
 
 
     def _is_label(self, symbol: str) -> bool:
@@ -61,3 +64,15 @@ class SymbolHandler:
         """
 
         return symbol[0] == LABEL_START and symbol[-1] == LABEL_END
+    
+
+    def _handle_label(self, label: str, line_num: int) -> None:
+        """
+        Handle supplied label by adding it to the symbol table if it does not already exist
+
+        Args:
+            `label` (str): The label to be checked and added to the `symbol_table`
+            `line_num` (int): The line number passed through from `handle_symbol`
+        """
+
+        raise NotImplementedError
