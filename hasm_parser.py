@@ -3,7 +3,8 @@ Parser module to parse .asm file into a dictionary of lines
 and their corresponding instructions
 """
 
-from constants import COMMENT, VAR_START
+from constants import COMMENT, VAR_START, LABEL_START
+from symbol_handler import SymbolHandler
 
 
 class CInstruction:
@@ -109,13 +110,15 @@ def parse_file(file: str) -> list[str]:
         return lines
 
 
-def parse_instructions(instructions: list[str]) -> dict[int, str | CInstruction]:
+def parse_instructions(instructions: list[str], symbol_handler: SymbolHandler) -> dict[int, str | CInstruction]:
     """
     Parse `instructions` into a dictionary with keys representing line-numbers
         and values representing the instruction (without any leading instruction chars like '@')
 
     Args:
         `instructions` (list[str]): the list of instructions
+        `symbol_handler` (`SymbolHandler`): A symbol handler for adding any @vars and (Labels) to the
+            symbol table.
 
     Returns:
         dict[int, str | CInstruction]: `instructions` parsed into a dictionary of line-numbers and
@@ -125,9 +128,15 @@ def parse_instructions(instructions: list[str]) -> dict[int, str | CInstruction]
     parsed_instructions = {}
 
     for i, instruction in enumerate(instructions):
-        if instruction[0] != VAR_START:
+        if instruction[0] not in (VAR_START, LABEL_START):
             parsed_instructions[i] = CInstruction(instruction)
         else:
-            parsed_instructions[i] = instruction.removeprefix(VAR_START)
+            # We pass the @var or (Label) into the symbol handler to be 
+            # added to the symbol table where necessary as well as to be cleaned
+            # and return back to the dictionary of instructions. If it's a label, we return None back
+            if (parsed_instruction := symbol_handler.handle_symbol(instruction, i) != None):
+                parsed_instructions[i] = parsed_instruction
+                
+            # parsed_instructions[i] = instruction.removeprefix(VAR_START)
 
     return parsed_instructions

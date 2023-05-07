@@ -31,16 +31,21 @@ class SymbolHandler:
             `instructions` (list[str]): A list of .asm instructions
         """
 
+        # TODO - May not actually be necessary if we read in at time of parsing instructions
         raise NotImplementedError
 
 
-    def handle_symbol(self, symbol: str) -> None:
+    def handle_symbol(self, symbol: str, line_num: int) -> str:
         """
         Handle a supplied symbol by adding it to the symbol table if it does not already exist there
 
         Args:
             `symbol` (str): The symbol to be checked and added to the `symbol_table` 
                 if it does not already exist
+            `line_num` (int): The line number of this symbol in the .asm file
+
+        Returns:
+            str: The cleaned symbol (removed '@' from @var or '(' and ')' from (Label))
         """
 
         raise NotImplementedError
@@ -54,7 +59,7 @@ class SymbolHandler:
             Add to `symbol_table`
 
         Args:
-            `label` (str): The label to be handled 
+            `label` (str): The label to be handled
         """
 
         raise NotImplementedError
