@@ -3,7 +3,14 @@ Test methods for translator module
 """
 
 from hasm_parser import CInstruction
-from translator import comp_to_bin, dest_to_bin, jump_to_bin, c_inst_to_bin, a_inst_to_bin
+from translator import (
+    comp_to_bin,
+    dest_to_bin,
+    jump_to_bin,
+    c_inst_to_bin,
+    a_inst_to_bin,
+)
+
 
 def test_comp_to_bin_0() -> None:
     assert comp_to_bin(comp="0") == "0101010"
@@ -57,6 +64,7 @@ def test_c_inst_to_bin_with_jump() -> None:
 
 def test_a_inst_to_bin() -> None:
     assert a_inst_to_bin(42) == "0000000000101010"
+
 
 def test_a_inst_to_bin2() -> None:
     assert a_inst_to_bin(2) == "0000000000000010"

@@ -5,6 +5,7 @@ Test methods for hasm_parser module
 import os
 
 from hasm_parser import parse_file, parse_instructions, CInstruction
+from symbol_handler import SymbolHandler
 
 expected_c_instruction = CInstruction("D=M+1")
 expected_c_instruction.comp = "M+1"
@@ -41,7 +42,7 @@ def test_full_c_instruction():
 
 def test_parse_instructions():
     parsed_file = parse_file(f"{os.path.dirname(__file__)}/parser_test_file.asm")
-    assert parse_instructions(parsed_file) == {
+    assert parse_instructions(parsed_file, symbol_handler=SymbolHandler()) == { # type: ignore
         0: "1",
         1: expected_c_instruction,
         2: "2",

@@ -5,6 +5,7 @@ into binary machine code
 
 from constants import BIN_START, COMP_TABLE, DEST_TABLE, JUMP_TABLE, NO_DEST, NO_JUMP
 from hasm_parser import CInstruction
+from symbol_handler import SymbolHandler
 
 
 def comp_to_bin(comp: str) -> str:
@@ -94,23 +95,27 @@ def a_inst_to_bin(a_inst: int) -> str:
     return bin(a_inst)[2:].zfill(16)
 
 
-def translate_instructions(instructions: dict[int, str | CInstruction]) -> list[str]:
+def translate_instructions(
+    instructions: dict[int, str | CInstruction], symbol_handler: SymbolHandler
+) -> list[str]:
     """
     Translate a dictionary of Assembly instructions into a list of binary instructions
 
     Args:
         `instructions` (dict[int, str | CInstruction]): The dictionary of assembly instructions
-    
+
     Returns:
         `list[str]`: The list of instructions in binary (as strings)
     """
 
     binary_instructions = []
 
-    for instruction in instructions.values():
+    for _, instruction in instructions.items():
         if isinstance(instruction, CInstruction):
             binary_instructions.append(c_inst_to_bin(instruction))
         else:
+            if not instruction.isdigit():
+                instruction = symbol_handler.lookup_symbol(instruction)
             binary_instructions.append(a_inst_to_bin(int(instruction)))
 
     return binary_instructions

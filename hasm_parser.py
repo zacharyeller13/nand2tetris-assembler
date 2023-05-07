@@ -3,7 +3,8 @@ Parser module to parse .asm file into a dictionary of lines
 and their corresponding instructions
 """
 
-from constants import COMMENT, VAR_START
+from constants import COMMENT, VAR_START, LABEL_START
+from symbol_handler import SymbolHandler
 
 
 class CInstruction:
@@ -109,13 +110,17 @@ def parse_file(file: str) -> list[str]:
         return lines
 
 
-def parse_instructions(instructions: list[str]) -> dict[int, str | CInstruction]:
+def parse_instructions(
+    instructions: list[str], symbol_handler: SymbolHandler
+) -> dict[int, str | CInstruction]:
     """
     Parse `instructions` into a dictionary with keys representing line-numbers
         and values representing the instruction (without any leading instruction chars like '@')
 
     Args:
         `instructions` (list[str]): the list of instructions
+        `symbol_handler` (`SymbolHandler`): A symbol handler for adding any @vars and
+            (Labels) to the symbol table.
 
     Returns:
         dict[int, str | CInstruction]: `instructions` parsed into a dictionary of line-numbers and
@@ -123,11 +128,32 @@ def parse_instructions(instructions: list[str]) -> dict[int, str | CInstruction]
     """
 
     parsed_instructions = {}
+    # Separate from the actual iteration of the instructions list so we can skip an increment if
+    # symbol is a (Label)
+    line_num = 0
 
-    for i, instruction in enumerate(instructions):
-        if instruction[0] != VAR_START:
-            parsed_instructions[i] = CInstruction(instruction)
+    # Handle all labels first so as not to accidentally add them as vars
+    # if a reference appears before the label is declared
+    symbol_handler.handle_labels(instructions)
+
+    for instruction in instructions:
+        if instruction[0] not in (VAR_START, LABEL_START):
+            parsed_instructions[line_num] = CInstruction(instruction)
+            line_num += 1
+        elif instruction.startswith(VAR_START) and instruction[1:].isdigit():
+            parsed_instructions[line_num] = instruction.removeprefix(VAR_START)
+            line_num += 1
         else:
-            parsed_instructions[i] = instruction.removeprefix(VAR_START)
+            # We pass the @var or (Label) into the symbol handler to be
+            # added to the symbol table where necessary as well as to be cleaned
+            # and return back to the dictionary of instructions.
+            # If it's a label declaration, we return None and skip that line
+            if (
+                parsed_instruction := symbol_handler.handle_symbol(
+                    instruction, line_num
+                )
+            ) is not None:
+                parsed_instructions[line_num] = parsed_instruction
+                line_num += 1
 
     return parsed_instructions
