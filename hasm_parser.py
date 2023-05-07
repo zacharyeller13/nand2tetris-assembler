@@ -119,8 +119,8 @@ def parse_instructions(
 
     Args:
         `instructions` (list[str]): the list of instructions
-        `symbol_handler` (`SymbolHandler`): A symbol handler for adding any @vars and (Labels) to the
-            symbol table.
+        `symbol_handler` (`SymbolHandler`): A symbol handler for adding any @vars and
+            (Labels) to the symbol table.
 
     Returns:
         dict[int, str | CInstruction]: `instructions` parsed into a dictionary of line-numbers and
@@ -131,6 +131,10 @@ def parse_instructions(
     # Separate from the actual iteration of the instructions list so we can skip an increment if
     # symbol is a (Label)
     line_num = 0
+
+    # Handle all labels first so as not to accidentally add them as vars
+    # if a reference appears before the label is declared
+    symbol_handler.handle_labels(instructions)
 
     for instruction in instructions:
         if instruction[0] not in (VAR_START, LABEL_START):

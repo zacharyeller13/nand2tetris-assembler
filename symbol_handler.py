@@ -22,6 +22,24 @@ class SymbolHandler:
         self.symbol_table: dict[str, int] = PRE_DEFINED_SYMBOLS.copy()
         self._next_address: int = 16
 
+    def handle_labels(self, instructions: list[str]) -> None:
+        """
+        Handle only labels from a supplied list of instructions. Done before any other symbol handling
+        to avoid any label references that appear before
+        the label declaration being incorrectly added as a variable instead
+
+        Args:
+            `instructions` (list[str]): The list of assembly instructions
+        """
+
+        line_num = 0
+
+        for instruction in instructions:
+            if self._is_label(instruction):
+                self._handle_label(instruction, line_num)
+            else:
+                line_num += 1
+
     def handle_symbol(self, symbol: str, line_num: int) -> str | None:
         """
         Handle a supplied symbol by adding it to the symbol table if it does not already exist there
@@ -96,4 +114,6 @@ class SymbolHandler:
         if (return_value := self.symbol_table.get(symbol)) is not None:
             return return_value
 
-        raise KeyError(f"Variable or Label {symbol} does not exist in the symbol table.")
+        raise KeyError(
+            f"Variable or Label {symbol} does not exist in the symbol table."
+        )
