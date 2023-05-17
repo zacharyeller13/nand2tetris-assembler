@@ -5,5 +5,5 @@ Final project for [Nand2Tetris Part 1](https://www.coursera.org/learn/build-a-co
 ## Usage
 
 ```
-python3 hack_assembler.py {absolute path to file to be assembled}/file_name.asm
+> python3 hack_assembler.py {absolute path}/{file_name}.asm
 ```
